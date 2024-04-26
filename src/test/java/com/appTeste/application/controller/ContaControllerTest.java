@@ -43,7 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 @ContextConfiguration(classes = {ContaController.class})
 @ExtendWith(SpringExtension.class)
 @DisabledInAotMode
-class ContaControllerDiffblueTest {
+class ContaControllerTest {
     @Autowired
     private ContaController contaController;
 
@@ -70,69 +70,6 @@ class ContaControllerDiffblueTest {
 
     @MockBean
     private UpdatePagamentoContaUseCase updatePagamentoContaUseCase;
-
-    /**
-     * Method under test: {@link ContaController#addNew(CreateContaRequest)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testAddNew() throws Exception {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Java 8 date/time type `java.time.LocalDate` not supported by default: add Module "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" to enable handling (through reference chain: com.appTeste.application.controller.data.request.CreateContaRequest["dataVencimento"])
-        //       at com.fasterxml.jackson.databind.exc.InvalidDefinitionException.from(InvalidDefinitionException.java:77)
-        //       at com.fasterxml.jackson.databind.SerializerProvider.reportBadDefinition(SerializerProvider.java:1308)
-        //       at com.fasterxml.jackson.databind.ser.impl.UnsupportedTypeSerializer.serialize(UnsupportedTypeSerializer.java:35)
-        //       at com.fasterxml.jackson.databind.ser.BeanPropertyWriter.serializeAsField(BeanPropertyWriter.java:732)
-        //       at com.fasterxml.jackson.databind.ser.std.BeanSerializerBase.serializeFields(BeanSerializerBase.java:772)
-        //       at com.fasterxml.jackson.databind.ser.BeanSerializer.serialize(BeanSerializer.java:178)
-        //       at com.fasterxml.jackson.databind.ser.DefaultSerializerProvider._serialize(DefaultSerializerProvider.java:479)
-        //       at com.fasterxml.jackson.databind.ser.DefaultSerializerProvider.serializeValue(DefaultSerializerProvider.java:318)
-        //       at com.fasterxml.jackson.databind.ObjectMapper._writeValueAndClose(ObjectMapper.java:4719)
-        //       at com.fasterxml.jackson.databind.ObjectMapper.writeValueAsString(ObjectMapper.java:3964)
-        //   See https://diff.blue/R013 to resolve this issue.
-
-        // Arrange
-        CreateContaRequest createContaRequest = new CreateContaRequest();
-        createContaRequest.setDataPagamento(LocalDate.of(1970, 1, 1));
-        createContaRequest.setDataVencimento(LocalDate.of(1970, 1, 1));
-        createContaRequest.setDescricao("Descricao");
-        createContaRequest.setValor(new BigDecimal("2.3"));
-        String content = (new ObjectMapper()).writeValueAsString(createContaRequest);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/conta")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content);
-
-        // Act
-        MockMvcBuilders.standaloneSetup(contaController).build().perform(requestBuilder);
-    }
-
-    /**
-     * Method under test: {@link ContaController#importCsv(MultipartFile)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testImportCsv() throws IOException {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   jakarta.servlet.ServletException: Request processing failed: org.springframework.web.multipart.MultipartException: Current request is not a multipart request
-        //       at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
-        //       at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-        //   org.springframework.web.multipart.MultipartException: Current request is not a multipart request
-        //       at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
-        //       at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-        //   See https://diff.blue/R013 to resolve this issue.
-
-        // Arrange
-        ContaController contaController = new ContaController();
-
-        // Act
-        contaController.importCsv(new MockMultipartFile("Name", new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))));
-    }
 
     /**
      * Method under test: {@link ContaController#getAll(int, int)}
@@ -162,10 +99,10 @@ class ContaControllerDiffblueTest {
         // Arrange
         ArrayList<Conta> contaList = new ArrayList<>();
         Conta.ContaBuilder builderResult = Conta.builder();
-        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(1970, 1, 1));
-        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(1970, 1, 1))
+        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(2024, 1, 1));
+        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(2024, 1, 1))
                 .descricao("Descricao")
                 .id(1L)
                 .situacao(SituacaoEnum.PENDENTE);
@@ -184,8 +121,8 @@ class ContaControllerDiffblueTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"id\":1,\"dataCriacao\":[1970,1,1,0,0],\"dataAlteracao\":[1970,1,1,0,0],\"dataVencimento\":[1970,1,1],"
-                                        + "\"dataPagamento\":[1970,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"}]"));
+                                "[{\"id\":1,\"dataCriacao\":[2024,1,1,0,0],\"dataAlteracao\":[2024,1,1,0,0],\"dataVencimento\":[2024,1,1],"
+                                        + "\"dataPagamento\":[2024,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"}]"));
     }
 
     /**
@@ -196,20 +133,20 @@ class ContaControllerDiffblueTest {
         // Arrange
         ArrayList<Conta> contaList = new ArrayList<>();
         Conta.ContaBuilder builderResult = Conta.builder();
-        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(1970, 1, 1));
-        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(1970, 1, 1))
+        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(2024, 1, 1));
+        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(2024, 1, 1))
                 .descricao("Descricao")
                 .id(1L)
                 .situacao(SituacaoEnum.PENDENTE);
         Conta buildResult = situacaoResult.valor(new BigDecimal("2.3")).build();
         contaList.add(buildResult);
         Conta.ContaBuilder builderResult2 = Conta.builder();
-        Conta.ContaBuilder dataAlteracaoResult2 = builderResult2.dataAlteracao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataCriacaoResult2 = dataAlteracaoResult2.dataCriacao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataPagamentoResult2 = dataCriacaoResult2.dataPagamento(LocalDate.of(1970, 1, 1));
-        Conta.ContaBuilder situacaoResult2 = dataPagamentoResult2.dataVencimento(LocalDate.of(1970, 1, 1))
+        Conta.ContaBuilder dataAlteracaoResult2 = builderResult2.dataAlteracao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataCriacaoResult2 = dataAlteracaoResult2.dataCriacao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataPagamentoResult2 = dataCriacaoResult2.dataPagamento(LocalDate.of(2024, 1, 1));
+        Conta.ContaBuilder situacaoResult2 = dataPagamentoResult2.dataVencimento(LocalDate.of(2024, 1, 1))
                 .descricao("Descricao")
                 .id(1L)
                 .situacao(SituacaoEnum.PENDENTE);
@@ -228,9 +165,9 @@ class ContaControllerDiffblueTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"id\":1,\"dataCriacao\":[1970,1,1,0,0],\"dataAlteracao\":[1970,1,1,0,0],\"dataVencimento\":[1970,1,1],"
-                                        + "\"dataPagamento\":[1970,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"},{\"id\":1,\"dataCriacao"
-                                        + "\":[1970,1,1,0,0],\"dataAlteracao\":[1970,1,1,0,0],\"dataVencimento\":[1970,1,1],\"dataPagamento\":[1970,1,1"
+                                "[{\"id\":1,\"dataCriacao\":[2024,1,1,0,0],\"dataAlteracao\":[2024,1,1,0,0],\"dataVencimento\":[2024,1,1],"
+                                        + "\"dataPagamento\":[2024,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"},{\"id\":1,\"dataCriacao"
+                                        + "\":[2024,1,1,0,0],\"dataAlteracao\":[2024,1,1,0,0],\"dataVencimento\":[2024,1,1],\"dataPagamento\":[2024,1,1"
                                         + "],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"}]"));
     }
 
@@ -241,10 +178,10 @@ class ContaControllerDiffblueTest {
     void testGetById() throws Exception {
         // Arrange
         Conta.ContaBuilder builderResult = Conta.builder();
-        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(1970, 1, 1));
-        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(1970, 1, 1))
+        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(2024, 1, 1));
+        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(2024, 1, 1))
                 .descricao("Descricao")
                 .id(1L)
                 .situacao(SituacaoEnum.PENDENTE);
@@ -260,8 +197,8 @@ class ContaControllerDiffblueTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "{\"id\":1,\"dataCriacao\":[1970,1,1,0,0],\"dataAlteracao\":[1970,1,1,0,0],\"dataVencimento\":[1970,1,1],"
-                                        + "\"dataPagamento\":[1970,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"}"));
+                                "{\"id\":1,\"dataCriacao\":[2024,1,1,0,0],\"dataAlteracao\":[2024,1,1,0,0],\"dataVencimento\":[2024,1,1],"
+                                        + "\"dataPagamento\":[2024,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"}"));
     }
 
     /**
@@ -274,9 +211,9 @@ class ContaControllerDiffblueTest {
         when(searchTotalPagoPeriodo.execute(Mockito.<LocalDate>any(), Mockito.<LocalDate>any()))
                 .thenReturn(new BigDecimal("2.3"));
         MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/conta/search/totalPago");
-        MockHttpServletRequestBuilder paramResult = getResult.param("dataFim", String.valueOf(LocalDate.of(1970, 1, 1)));
+        MockHttpServletRequestBuilder paramResult = getResult.param("dataFim", String.valueOf(LocalDate.of(2024, 1, 1)));
         MockHttpServletRequestBuilder requestBuilder = paramResult.param("dataInicio",
-                String.valueOf(LocalDate.of(1970, 1, 1)));
+                String.valueOf(LocalDate.of(2024, 1, 1)));
 
         // Act and Assert
         MockMvcBuilders.standaloneSetup(contaController)
@@ -298,7 +235,7 @@ class ContaControllerDiffblueTest {
                 .thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/conta/search");
         MockHttpServletRequestBuilder paramResult = getResult
-                .param("dataVencimento", String.valueOf(LocalDate.of(1970, 1, 1)))
+                .param("dataVencimento", String.valueOf(LocalDate.of(2024, 1, 1)))
                 .param("descricao", "foo");
         MockHttpServletRequestBuilder paramResult2 = paramResult.param("pageNumber", String.valueOf(1));
         MockHttpServletRequestBuilder requestBuilder = paramResult2.param("pageSize", String.valueOf(1));
@@ -321,10 +258,10 @@ class ContaControllerDiffblueTest {
         // Arrange
         ArrayList<Conta> contaList = new ArrayList<>();
         Conta.ContaBuilder builderResult = Conta.builder();
-        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(1970, 1, 1));
-        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(1970, 1, 1))
+        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(2024, 1, 1));
+        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(2024, 1, 1))
                 .descricao("Descricao")
                 .id(1L)
                 .situacao(SituacaoEnum.PENDENTE);
@@ -334,7 +271,7 @@ class ContaControllerDiffblueTest {
                 .thenReturn(contaList);
         MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/conta/search");
         MockHttpServletRequestBuilder paramResult = getResult
-                .param("dataVencimento", String.valueOf(LocalDate.of(1970, 1, 1)))
+                .param("dataVencimento", String.valueOf(LocalDate.of(2024, 1, 1)))
                 .param("descricao", "foo");
         MockHttpServletRequestBuilder paramResult2 = paramResult.param("pageNumber", String.valueOf(1));
         MockHttpServletRequestBuilder requestBuilder = paramResult2.param("pageSize", String.valueOf(1));
@@ -347,8 +284,8 @@ class ContaControllerDiffblueTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"id\":1,\"dataCriacao\":[1970,1,1,0,0],\"dataAlteracao\":[1970,1,1,0,0],\"dataVencimento\":[1970,1,1],"
-                                        + "\"dataPagamento\":[1970,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"}]"));
+                                "[{\"id\":1,\"dataCriacao\":[2024,1,1,0,0],\"dataAlteracao\":[2024,1,1,0,0],\"dataVencimento\":[2024,1,1],"
+                                        + "\"dataPagamento\":[2024,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"}]"));
     }
 
     /**
@@ -360,20 +297,20 @@ class ContaControllerDiffblueTest {
         // Arrange
         ArrayList<Conta> contaList = new ArrayList<>();
         Conta.ContaBuilder builderResult = Conta.builder();
-        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(1970, 1, 1));
-        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(1970, 1, 1))
+        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(2024, 1, 1));
+        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(2024, 1, 1))
                 .descricao("Descricao")
                 .id(1L)
                 .situacao(SituacaoEnum.PENDENTE);
         Conta buildResult = situacaoResult.valor(new BigDecimal("2.3")).build();
         contaList.add(buildResult);
         Conta.ContaBuilder builderResult2 = Conta.builder();
-        Conta.ContaBuilder dataAlteracaoResult2 = builderResult2.dataAlteracao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataCriacaoResult2 = dataAlteracaoResult2.dataCriacao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataPagamentoResult2 = dataCriacaoResult2.dataPagamento(LocalDate.of(1970, 1, 1));
-        Conta.ContaBuilder situacaoResult2 = dataPagamentoResult2.dataVencimento(LocalDate.of(1970, 1, 1))
+        Conta.ContaBuilder dataAlteracaoResult2 = builderResult2.dataAlteracao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataCriacaoResult2 = dataAlteracaoResult2.dataCriacao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataPagamentoResult2 = dataCriacaoResult2.dataPagamento(LocalDate.of(2024, 1, 1));
+        Conta.ContaBuilder situacaoResult2 = dataPagamentoResult2.dataVencimento(LocalDate.of(2024, 1, 1))
                 .descricao("Descricao")
                 .id(1L)
                 .situacao(SituacaoEnum.PENDENTE);
@@ -383,7 +320,7 @@ class ContaControllerDiffblueTest {
                 .thenReturn(contaList);
         MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/conta/search");
         MockHttpServletRequestBuilder paramResult = getResult
-                .param("dataVencimento", String.valueOf(LocalDate.of(1970, 1, 1)))
+                .param("dataVencimento", String.valueOf(LocalDate.of(2024, 1, 1)))
                 .param("descricao", "foo");
         MockHttpServletRequestBuilder paramResult2 = paramResult.param("pageNumber", String.valueOf(1));
         MockHttpServletRequestBuilder requestBuilder = paramResult2.param("pageSize", String.valueOf(1));
@@ -396,48 +333,10 @@ class ContaControllerDiffblueTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"id\":1,\"dataCriacao\":[1970,1,1,0,0],\"dataAlteracao\":[1970,1,1,0,0],\"dataVencimento\":[1970,1,1],"
-                                        + "\"dataPagamento\":[1970,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"},{\"id\":1,\"dataCriacao"
-                                        + "\":[1970,1,1,0,0],\"dataAlteracao\":[1970,1,1,0,0],\"dataVencimento\":[1970,1,1],\"dataPagamento\":[1970,1,1"
+                                "[{\"id\":1,\"dataCriacao\":[2024,1,1,0,0],\"dataAlteracao\":[2024,1,1,0,0],\"dataVencimento\":[2024,1,1],"
+                                        + "\"dataPagamento\":[2024,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"},{\"id\":1,\"dataCriacao"
+                                        + "\":[2024,1,1,0,0],\"dataAlteracao\":[2024,1,1,0,0],\"dataVencimento\":[2024,1,1],\"dataPagamento\":[2024,1,1"
                                         + "],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"}]"));
-    }
-
-    /**
-     * Method under test: {@link ContaController#update(UpdateContaRequest, Long)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testUpdate() throws Exception {
-        // TODO: Diffblue Cover was only able to create a partial test for this method:
-        //   Reason: No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Java 8 date/time type `java.time.LocalDate` not supported by default: add Module "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" to enable handling (through reference chain: com.appTeste.application.controller.data.request.UpdateContaRequest["dataVencimento"])
-        //       at com.fasterxml.jackson.databind.exc.InvalidDefinitionException.from(InvalidDefinitionException.java:77)
-        //       at com.fasterxml.jackson.databind.SerializerProvider.reportBadDefinition(SerializerProvider.java:1308)
-        //       at com.fasterxml.jackson.databind.ser.impl.UnsupportedTypeSerializer.serialize(UnsupportedTypeSerializer.java:35)
-        //       at com.fasterxml.jackson.databind.ser.BeanPropertyWriter.serializeAsField(BeanPropertyWriter.java:732)
-        //       at com.fasterxml.jackson.databind.ser.std.BeanSerializerBase.serializeFields(BeanSerializerBase.java:772)
-        //       at com.fasterxml.jackson.databind.ser.BeanSerializer.serialize(BeanSerializer.java:178)
-        //       at com.fasterxml.jackson.databind.ser.DefaultSerializerProvider._serialize(DefaultSerializerProvider.java:479)
-        //       at com.fasterxml.jackson.databind.ser.DefaultSerializerProvider.serializeValue(DefaultSerializerProvider.java:318)
-        //       at com.fasterxml.jackson.databind.ObjectMapper._writeValueAndClose(ObjectMapper.java:4719)
-        //       at com.fasterxml.jackson.databind.ObjectMapper.writeValueAsString(ObjectMapper.java:3964)
-        //   See https://diff.blue/R013 to resolve this issue.
-
-        // Arrange
-        UpdateContaRequest updateContaRequest = new UpdateContaRequest();
-        updateContaRequest.setDataPagamento(LocalDate.of(1970, 1, 1));
-        updateContaRequest.setDataVencimento(LocalDate.of(1970, 1, 1));
-        updateContaRequest.setDescricao("Descricao");
-        updateContaRequest.setValor(new BigDecimal("2.3"));
-        String content = (new ObjectMapper()).writeValueAsString(updateContaRequest);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/conta/{id}", 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content);
-
-        // Act
-        MockMvcBuilders.standaloneSetup(contaController).build().perform(requestBuilder);
     }
 
     /**
@@ -447,10 +346,10 @@ class ContaControllerDiffblueTest {
     void testUpdateSituacao() throws Exception {
         // Arrange
         Conta.ContaBuilder builderResult = Conta.builder();
-        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(1970, 1, 1).atStartOfDay());
-        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(1970, 1, 1));
-        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(1970, 1, 1))
+        Conta.ContaBuilder dataAlteracaoResult = builderResult.dataAlteracao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataCriacaoResult = dataAlteracaoResult.dataCriacao(LocalDate.of(2024, 1, 1).atStartOfDay());
+        Conta.ContaBuilder dataPagamentoResult = dataCriacaoResult.dataPagamento(LocalDate.of(2024, 1, 1));
+        Conta.ContaBuilder situacaoResult = dataPagamentoResult.dataVencimento(LocalDate.of(2024, 1, 1))
                 .descricao("Descricao")
                 .id(1L)
                 .situacao(SituacaoEnum.PENDENTE);
@@ -466,7 +365,7 @@ class ContaControllerDiffblueTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "{\"id\":1,\"dataCriacao\":[1970,1,1,0,0],\"dataAlteracao\":[1970,1,1,0,0],\"dataVencimento\":[1970,1,1],"
-                                        + "\"dataPagamento\":[1970,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"}"));
+                                "{\"id\":1,\"dataCriacao\":[2024,1,1,0,0],\"dataAlteracao\":[2024,1,1,0,0],\"dataVencimento\":[2024,1,1],"
+                                        + "\"dataPagamento\":[2024,1,1],\"valor\":2.3,\"descricao\":\"Descricao\",\"situacao\":\"PENDENTE\"}"));
     }
 }
