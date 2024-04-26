@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class UpdateContaResponse {
+public class GetContaResponse {
 
     private Long id;
     private LocalDateTime dataCriacao;
@@ -20,7 +20,7 @@ public class UpdateContaResponse {
     private String descricao;
     private SituacaoEnum situacao;
 
-    public UpdateContaResponse(Conta conta) {
+    public GetContaResponse(Conta conta) {
         this.id = conta.getId();
         this.dataCriacao = conta.getDataCriacao();
         this.dataAlteracao = conta.getDataAlteracao();

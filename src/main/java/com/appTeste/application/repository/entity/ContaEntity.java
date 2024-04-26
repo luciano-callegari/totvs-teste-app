@@ -1,11 +1,14 @@
 package com.appTeste.application.repository.entity;
 
 import com.appTeste.domain.model.Conta;
+import com.appTeste.domain.model.types.SituacaoEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Table(name = "conta")
 @Entity(name = "conta")
@@ -24,15 +27,16 @@ public class ContaEntity {
 
     public LocalDateTime dataAlteracao;
 
-    public LocalDateTime dataVencimento;
+    public LocalDate dataVencimento;
 
-    public LocalDateTime dataPagamento;
+    public LocalDate dataPagamento;
 
     public BigDecimal valor;
 
     public String descricao;
 
-    public String situacao;
+    @Enumerated(EnumType.STRING)
+    public SituacaoEnum situacao;
 
     public static ContaEntity fromConta(Conta conta) {
         return ContaEntity.builder()
@@ -60,15 +64,27 @@ public class ContaEntity {
                 .build();
     }
 
-    public void setNewDataCriacao() {
-        this.dataCriacao = LocalDateTime.now();
-    }
-
-    public void setNewDataAlteracao() {
-        this.dataAlteracao = LocalDateTime.now();
-    }
-
-    public void setNewSituacao(String situacao) {
+    public void setNewSituacao(SituacaoEnum situacao) {
         this.situacao = situacao;
+    }
+
+    public void setNewDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setNewPagamento(LocalDate dataPagamento) {
+        this.dataPagamento = dataPagamento;
+    }
+
+    public void setNewDataVencimento(LocalDate dataVencimento) {
+        this.dataVencimento = dataVencimento;
+    }
+
+    public void setNewValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public void setNewDataAlteracao(LocalDateTime dataAlteracao) {
+        this.dataAlteracao = dataAlteracao;
     }
 }

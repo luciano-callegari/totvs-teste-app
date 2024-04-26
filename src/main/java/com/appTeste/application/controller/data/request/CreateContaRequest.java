@@ -8,18 +8,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateContaRequest {
-    private LocalDateTime dataVencimento;
-    private LocalDateTime dataPagamento;
+    private LocalDate dataVencimento;
+    private LocalDate dataPagamento;
     private BigDecimal valor;
     private String descricao;
-    private String situacao;
 
     public Conta toConta() {
         return Conta.builder()
@@ -27,7 +26,6 @@ public class CreateContaRequest {
                 .dataPagamento(this.dataPagamento)
                 .valor(this.valor)
                 .descricao(this.descricao)
-                .situacao(this.situacao)
                 .build();
     }
 }
