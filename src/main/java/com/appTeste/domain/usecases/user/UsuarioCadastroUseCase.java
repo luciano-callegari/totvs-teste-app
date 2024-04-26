@@ -14,11 +14,11 @@ public class UsuarioCadastroUseCase {
     private UserRepository userRepository;
 
     public Usuario execute(Usuario usuario) {
-        if (userRepository.getByLogin(usuario.getLogin()) != null)
+        if (userRepository.getByLogin(usuario.getLogin()).getLogin() != null)
             throw new ValidationException("Usuário indisponivel", "10001");
 
         String encPassword = new BCryptPasswordEncoder().encode(usuario.getPassword());
-        Usuario newusuario = new Usuario(usuario.getLogin(), encPassword, usuario.getRole());
-        return userRepository.create(newusuario);
+        Usuario newUsuario = new Usuario(usuario.getLogin(), encPassword, usuario.getRole());
+        return userRepository.create(newUsuario);
     }
 }

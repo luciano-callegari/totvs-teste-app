@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -15,7 +16,8 @@ import java.text.SimpleDateFormat;
 @Configuration
 public class ObjectMapperConfig {
 
-    private static final String ISO_8601 = "yyyy-MM-dd'T'HH:mm:ss";
+    @Value("${appconfig.iso8601.datetimeformat}")
+    private String ISO_8601;
 
     @Bean
     public ObjectMapper objectMapper(final Jackson2ObjectMapperBuilder builder) {

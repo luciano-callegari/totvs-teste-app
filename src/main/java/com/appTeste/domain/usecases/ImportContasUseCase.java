@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class ImportContasUseCase {
 
-    @Value("${appconfi.iso8601.dateformat}")
+    @Value("${appconfig.iso8601.dateformat}")
     private String iso8601_dateformat;
     @Autowired
     private CreateContaUseCase createContaUseCase;

@@ -28,8 +28,12 @@ public class UserRepositoryGateway implements UserRepository {
 
     @Override
     public Usuario getByLogin(String login) {
-        return userRepositoryJpa.getByLogin(login)
-                .orElseGet(() -> new UserEntity())
-                .toUsuario();
+        UserEntity userEntity = userRepositoryJpa.getByLogin(login);
+
+        if (userEntity == null) {
+            return new Usuario();
+        }
+
+        return userEntity.toUsuario();
     }
 }
